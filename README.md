@@ -11,4 +11,4 @@ Here are temporary links to CoCalc pages for these notebooks
 | 3-20|[Demo](https://cocalc.com/share/19dd4696828d13a510d27fdd6a32bba68e35188a/3-20Demo.ipynb?viewer=share) <br> [Problems](https://cocalc.com/share/92bf14ee1e64afefd4e355731449a34c643dfc37/3-20Problems.ipynb?viewer=share) |
 | 3-27 | | 
 |4 -10 | [Demo](https://cocalc.com/share/adb98a54aef5852a194c9bd72a61671b47ac610e/4-10Demo.ipynb?viewer=share)|
-|4 - 17| |
+|4 - 17| [Demo](https://cocalc.com/share/07e7aab82ece9429984c0d313fe65e993e08e079/4-17DemoCorrect.ipynb?viewer=share) <br> [Problems](https://cocalc.com/share/87640e9da83e365a8863c960fb083bceff84ac60/4-17Problems.ipynb?viewer=share)|
