@@ -169,6 +169,12 @@ def back_iterates_n(L, c, n , tolerance = 0.01):
         iterate_list.append(back_iterates(iterate_list[-1], c, tolerance = tolerance))
     return iterate_list[1:]
 
+def circle_points(radius = 15, num_points = 40): 
+    """
+    This function just lists some points on a circle of a given radius
+    """
+    return [radius*exp(I*2*pi*k/num_points) for k in range(num_points + 1)]
+
 def plot_backiterated_circles(c, R, num_circles, back_tolerance = 0.01, curve_tolerance = 0.2, starting_points = 20):
     """c
     Plots the backiterated circles, starting with a circle with radius R, with 20 starting points.
@@ -209,3 +215,35 @@ def external_ray_points(c, qs, R_start = 15, iterates = 40): # So we want to act
                 rayi.append(poorly_ordered_points[j][i][l])
         rays.append(rayi)
     return rays
+
+
+def box_array(level, points, xmin = 0, xmax = 1, ymin = 0, ymax = 1):
+    """
+    Returns a 2^level by 2^level array of 0s or 1s, 
+    with a 1 in box (i,j) if there is a point in the box (i,j). Note that this could be done way more efficiently by storing the columns or rows as binary numbers. 
+    """
+    width = xmax - xmin
+    height = ymax - ymin
+    array = [[0 for j in range(2^level)] for i in range(2^level)]
+    for p in points:
+        px = (p[0] - xmin)/width -1/(2^(level + 2)) # rescale to within [0,1]
+        py = (p[1] - ymin)/height -1/(2^(level + 2))
+        i = int(px*2^level)
+        j = int(py*2^level)
+        array[i][j] = 1
+    return(array)
+
+def box_array_plot(b_array, xmin = 0, xmax = 1, ymin = 0, ymax = 1, color = 'green'):
+    width = xmax - xmin
+    height = ymax - ymin
+    num_width = len(b_array[0])
+    level = log(num_width,2)
+    lower_lefts = [(xmin + i*width/(num_width), ymin + j*height/(num_width)) for j in range(2^level) for i in range(2^level) if b_array[i][j] == 1]
+    δx = width/num_width
+    δy = height/(num_width)
+    corners = lambda x,y : [(x,y), (x + δx, y), (x + δx, y + δy), (x, y + δy)]
+    rect = lambda lx, ly : polygon( corners(lx,ly), color = color, alpha = 0.15) + polygon(corners(lx,ly), color = color, fill = False)
+    return(sum(rect(lx, ly) for (lx,ly) in lower_lefts))
+
+def number_of_ones(array):
+    return(sum(sum(a) for a in array))
