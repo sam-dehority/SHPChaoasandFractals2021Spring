@@ -46,7 +46,7 @@ def plot_with_julia(graphics, f, **kwds):
     xmin = x_center - image_width*0.5
     ymax = y_center + image_width*0.5
     ymin = y_center - image_width*0.5
-    graphics.save("./tmp/g.png", transparent = True, axes=False, xmin=xmin, xmax = xmax, ymin = ymin, ymax = ymax, aspect_ratio = 1, figsize = [10,10])
+    graphics.save("./tmp/g.png", transparent = True, axes=False, xmin=xmin, xmax = xmax, ymin = ymin, ymax = ymax, aspect_ratio = 1, figsize = [80,80])
     julia = julia_plot(f, mandelbrot = False, **kwdscopy)
     julia_modified = julia.pil.convert('RGBA')
     mod = pilimg.open('./tmp/g.png')
@@ -86,14 +86,30 @@ def plot_with_mandelbrot(graphics, **kwds):
     return m_modified
 
 def mapped_circle(center, radius, f, num_circles = 5, num_splines = 10, color = 'orange', thickness = .4, fillalpha= .1):
+    """
+    Returns the image of a circle with radial coordinate lines under a given map f. 
+    INPUT:
+
+    - ``center`` -- complex numer
+
+    - ``radius`` -- real number
+    
+    - ``f`` -- a function of a variable `z` 
+    
+    OUTPUT:
+    
+    -  A graphics object of the image of the image f(C) of the circle C with given radius and center. 
+
+    
+    """
     center_coords = (CDF(center).real(), CDF(center).imag())
     radii = [radius/num_circles * k for k in range(1, num_circles + 1)]
-    angles = [pi *θ / (num_splines) for θ in range(num_splines)]
-    coords_f = lambda x,y : ((z := f(x + I*y)).real(), z.imag())
+    angles = [2*pi *θ / (num_splines) for θ in range(2*num_splines)]
+    coords_f = lambda x,y : ((q := f(z = x + I*y)).real(), q.imag())
     t = var('t')
-    spline = lambda θ : parametric_plot(coords_f(cos(θ)*t + center_coords[0] , sin(θ)*t + center_coords[1]), (t , -radius, radius), color = color, thickness = thickness)
-    circ = lambda r : parametric_plot(coords_f(r*cos(t) + center_coords[0], r*sin(t) + center_coords[1]), (t,0,2*pi), color = color, fill = True, fillcolor = color, fillalpha = 0.1, thickness = thickness)
-    return sum(spline(θ) for θ in angles) + sum(circ(r) for r in radii )
+    spline = lambda θ : parametric_plot(coords_f(x = cos(θ)*t + center_coords[0] ,y =  sin(θ)*t + center_coords[1]), (t , 0, radius), color = color, thickness = thickness)
+    circ = lambda r : parametric_plot(coords_f(x = r*cos(t) + center_coords[0], y = r*sin(t) + center_coords[1]), (t,0,2*pi), color = color, fill = True, fillcolor = color, fillalpha = fillalpha, thickness = thickness)
+    return sum(spline(θ) for θ in angles) + sum(circ(r) for r in radii)
 
 def back_iterates(L,c, tolerance = 0.01):
     """
